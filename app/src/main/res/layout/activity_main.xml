@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.dxh.expandrecycleview.MainActivity">
+
+    <Button
+        android:id="@+id/btnOpenSameHeightExpandActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开页面(自动吸顶，高度一致)"
+        android:textSize="50px" />
+
+    <Button
+        android:id="@+id/btnOpenNotSameHeightExpandActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开页面(自动吸顶，高度不一致)"
+        android:textSize="50px" />
+
+    <Button
+        android:id="@+id/btnOpenPhoneExpandActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开页面(手机联系人，吸不吸顶可控制)"
+        android:textSize="50px" />
+
+    <Button
+        android:id="@+id/btnOpenNomalExpandActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开页面(当普通recycleView使用)"
+        android:textSize="50px" />
+
+
+</LinearLayout>
