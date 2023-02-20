@@ -108,14 +108,14 @@ public class ExpandRecycleView extends FrameLayout {
                 //吸顶
                 if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
-                    if (expandTreeNode.getLevel() != level) {
-                        if (expandTreeNode.getLevel() > level) {
-                            break;
-                        }
-                        continue;
-                    } else {
-                        level++;
-                    }
+//                    if (expandTreeNode.getLevel() != level) {
+//                        if (expandTreeNode.getLevel() < level) {
+//                            break;
+//                        }
+//                        continue;
+//                    } else {
+//                        level++;
+//                    }
                     view.setTag(expandTreeNode.getItemPosition());
                     y = defalutFixTop;
                     view.setY(y);
@@ -124,14 +124,14 @@ public class ExpandRecycleView extends FrameLayout {
 //                    Log.e(TAG, "scrollChange: 吸顶" + expandTreeNode.getItemPosition());
                 } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY > defalutFixTop) {//吸附
-                    if (expandTreeNode.getLevel() != level) {
-                        if (expandTreeNode.getLevel() > level) {
-                            break;
-                        }
-                        continue;
-                    } else {
-                        level++;
-                    }
+//                    if (expandTreeNode.getLevel() != level) {
+//                        if (expandTreeNode.getLevel() < level) {
+//                            break;
+//                        }
+//                        continue;
+//                    } else {
+//                        level++;
+//                    }
                     view.setTag(expandTreeNode.getItemPosition());
                     y = nextParentOrBrotherTreeNodeMarginTop - scrollY - expandTreeNodeItemHeight;
                     view.setY(y);
@@ -150,14 +150,14 @@ public class ExpandRecycleView extends FrameLayout {
             } else {
                 //吸顶
                 if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
-                    if (expandTreeNode.getLevel() != level) {
-                        if (expandTreeNode.getLevel() > level) {
-                            break;
-                        }
-                        continue;
-                    } else {
-                        level++;
-                    }
+//                    if (expandTreeNode.getLevel() != level) {
+//                        if (expandTreeNode.getLevel() < level) {
+//                            break;
+//                        }
+//                        continue;
+//                    } else {
+//                        level++;
+//                    }
                     view.setTag(expandTreeNode.getItemPosition());
                     y = defalutFixTop;
                     view.setY(y);
@@ -187,10 +187,15 @@ public class ExpandRecycleView extends FrameLayout {
             view = LayoutInflater.from(getContext()).inflate(layoutId, null);
             fixHeadContainerFrameLayout.addView(view, 0);
             fixViewHashMap.put(treeNode.getLevel(), view);
+            adapter.createFixView(view, treeNode.getItemPosition(), treeNode);
         }
         view.getLayoutParams().height = treeNode.getItemHeight();
         view.requestLayout();
         return view;
+    }
+
+    public Map<Integer, View> getFixViewHashMap() {
+        return fixViewHashMap;
     }
 
     public RecyclerView getmRecyclerView() {

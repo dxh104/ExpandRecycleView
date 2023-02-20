@@ -35,6 +35,7 @@ public class SameHeightExpandActivity extends AppCompatActivity {
         initView();
         TreeNodeLevelManager.getInstance().clearFreeLevel();
         TreeNodeLevelManager.getInstance().setFreeLevel(1);//不会强制关闭,expandOnlyOneGroup
+        TreeNodeLevelManager.getInstance().clearLevelHightCache();
         TreeNodeLevelManager.getInstance().putHeight(1, 50);
         TreeNodeLevelManager.getInstance().putHeight(2, 50);
         TreeNodeLevelManager.getInstance().putHeight(3, 50);
@@ -67,6 +68,21 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                 tvTitle.setText(titleTreeNode.getData().titleContent);
                 tvTitle.setTextColor(titleTreeNode.getData().textColor);
                 tvTitle.setBackgroundColor(titleTreeNode.getData().background);
+            }
+
+            @Override
+            protected void createFixView(View view, int position, TreeNode<Title> titleTreeNode) {
+                super.createFixView(view, position, titleTreeNode);
+                if(view==null){
+                    return;
+                }
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Integer itemPostition = (Integer) v.getTag();
+                        collapseGroup(itemPostition);
+                    }
+                });
             }
 
             @Override
@@ -108,7 +124,6 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                     treeNodeExpandRecycleViewAdapter.collapseGroup(position);
                 } else {
                     treeNodeExpandRecycleViewAdapter.expandGroup(position);
-                    //设置自由等级，不被getChildExpandTreeNodeList方法约束（设置唯一展开会影响到）
 //                    treeNodeExpandRecycleViewAdapter.expandOnlyOneGroup(position);//TreeNodeLevelManager.getInstance().setFreeLevel(1)
                 }
             }

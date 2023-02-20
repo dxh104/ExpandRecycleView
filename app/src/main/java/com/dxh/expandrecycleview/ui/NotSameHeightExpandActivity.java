@@ -1,5 +1,6 @@
 package com.dxh.expandrecycleview.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -64,6 +65,28 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                 int tvTitleHeight = 120 - 20 * titleTreeNode.getLevel();
                 tvTitle.getLayoutParams().height = tvTitleHeight;
                 tvTitle.requestLayout();
+                if (titleTreeNode.isLeaf()) {
+                    if (titleTreeNode.isChecked()) {
+                        tvTitle.setTextColor(Color.parseColor("#ffff00"));
+                    } else {
+                        tvTitle.setTextColor(Color.parseColor("#ffffff"));
+                    }
+                }
+            }
+
+            @Override
+            protected void createFixView(View view, int position, TreeNode<Title> titleTreeNode) {
+                super.createFixView(view, position, titleTreeNode);
+                if(view==null){
+                    return;
+                }
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Integer itemPostition = (Integer) v.getTag();
+                        collapseGroup(itemPostition);
+                    }
+                });
             }
 
             @Override
@@ -95,6 +118,8 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                     idsStr += ids[i];
                 }
                 Log.e(TAG, "onItemCheckListner: position=" + position + " ids=" + idsStr + " isChecked=" + isChecked);
+                treeNode.setOneCheckedAndNotCheckedOther(!isChecked);//取消其他选中，设置当前选中状态
+                treeNodeExpandRecycleViewAdapter.notifyDataSetChanged();
             }
 
             @Override

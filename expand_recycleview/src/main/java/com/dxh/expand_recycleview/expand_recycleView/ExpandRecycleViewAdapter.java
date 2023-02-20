@@ -13,7 +13,9 @@ import com.dxh.expand_recycleview.base.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author XHD
@@ -30,7 +32,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
     protected int currentExpandPosition = -1;
     private boolean isMeasureDataHeightMarginTop = true;//默认测量计算高度
     private boolean isOpenStickyTop = true;//默认吸顶
-    protected List<TreeNode> mExpandDatas = new ArrayList<>();
+    protected List<T> mExpandDatas = new ArrayList<>();
 
     public ExpandRecycleViewAdapter(List<T> datas) {
         if (datas != null) {
@@ -130,6 +132,10 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
      */
     protected abstract void bindData(BaseViewHolder holder, int position, T t);
 
+    protected void createFixView(View view, int position, T t) {
+
+    }
+
     /**
      * 如果需要实现吸顶功能，需要在子Adapter中实现这个方法绑定view
      * 如果需要在内部实现点击事件，可以用(int)view.getTag()方法获取position
@@ -186,6 +192,18 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
                 TreeNode parent = tempT.getParent();
                 defalutFixTop += parent.getItemHeight();
                 tempT = (T) parent;
+            }
+        }
+        if (mExpandRecycleView != null) {
+            Map<Integer, View> fixViewHashMap = mExpandRecycleView.getFixViewHashMap();
+            Iterator<Map.Entry<Integer, View>> iterator = fixViewHashMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, View> next = iterator.next();
+                int fixLevel = next.getKey();
+                View fixView = next.getValue();
+                if (fixView != null && fixLevel >= level) {
+                    fixView.setVisibility(View.INVISIBLE);
+                }
             }
         }
         refreshExpandData();
@@ -275,11 +293,12 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             marginTop += itemHeight;
         }
     }
+
     //更新展开数据
     public void refreshExpandData() {
         mExpandDatas.clear();
         for (int i = 0; i < mDatas.size(); i++) {
-            TreeNode treeNode = mDatas.get(i);
+            T treeNode = mDatas.get(i);
             if (treeNode.isExpand()) {
                 mExpandDatas.add(treeNode);
             }
@@ -303,7 +322,6 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         view.requestLayout();
         view.measure(View.MeasureSpec.makeMeasureSpec(mExpandRecycleView.getmRecyclerView().getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         int measuredHeight = view.getMeasuredHeight();
-        Log.e(TAG, "getItemHeight:position=" + position + " measuredHeight=" + measuredHeight);
         return measuredHeight;
     }
 
@@ -323,7 +341,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             mExpandRecycleView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mExpandRecycleView.getmRecyclerView().smoothScrollToPosition(itemPosition);
+//                    mExpandRecycleView.getmRecyclerView().smoothScrollToPosition(itemPosition);
                     mExpandRecycleView.getLinearLayoutManager().scrollToPositionWithOffset(itemPosition, offsetY);
                 }
             }, 100);//防止空白
@@ -342,6 +360,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
     public boolean isOpenStickyTop() {
         return isOpenStickyTop;
     }
+
     //打开吸顶功能（默认开启）
     public void setOpenStickyTop(boolean openStickyTop) {
         isOpenStickyTop = openStickyTop;

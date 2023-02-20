@@ -35,6 +35,7 @@ public class PhoneExpandActivity extends AppCompatActivity {
         initView();
         TreeNodeLevelManager.getInstance().clearFreeLevel();
         TreeNodeLevelManager.getInstance().setFreeLevel(1);//不会强制关闭,expandOnlyOneGroup
+        TreeNodeLevelManager.getInstance().clearLevelHightCache();
         TreeNodeLevelManager.getInstance().putHeight(1, 50);
         TreeNodeLevelManager.getInstance().putHeight(2, 50);
         List<TreeNode<Title>> treeNodeList = DataHelper.testgetPhoneTreeNodeList();
