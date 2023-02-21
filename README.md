@@ -19,7 +19,6 @@ allprojects {
 
 ```
 	implementation 'com.github.dxh104.ExpandRecycleView:expand_recycleview:1.0.1'
-
 ```
 
 example {
