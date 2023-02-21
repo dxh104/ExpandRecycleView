@@ -84,7 +84,7 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Integer itemPostition = (Integer) v.getTag();
-                        collapseGroup(itemPostition);
+                        collapseGroup(itemPostition,true);
                     }
                 });
             }
@@ -130,9 +130,9 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "onItemExpandListner: position=" + position + " ids=" + idsStr + " isExpand=" + isExpand);
                 if (isExpand) {
-                    treeNodeExpandRecycleViewAdapter.collapseGroup(position);
+                    treeNodeExpandRecycleViewAdapter.collapseGroup(position,true);
                 } else {
-                    treeNodeExpandRecycleViewAdapter.expandGroup(position);
+                    treeNodeExpandRecycleViewAdapter.expandGroup(position,true);
                 }
             }
         });

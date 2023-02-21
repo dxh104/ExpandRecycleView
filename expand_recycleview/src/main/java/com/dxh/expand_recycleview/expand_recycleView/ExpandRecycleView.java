@@ -1,6 +1,7 @@
 package com.dxh.expand_recycleview.expand_recycleView;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,26 +54,26 @@ public class ExpandRecycleView extends FrameLayout {
         fixHeadContainerFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setVisibility(INVISIBLE);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-                    scrollChange();
-                }
-            }
-        });
-//        if (mRecyclerView.getItemDecorationCount() == 0) {
-//            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//                @Override
-//                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-//                    super.onDraw(c, parent, state);
-//                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-//                        scrollChange();
-//                    }
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+//                    scrollChange();
 //                }
-//            });
-//        }
+//            }
+//        });
+        if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
+            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                    super.onDraw(c, parent, state);
+                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+                        scrollChange();
+                    }
+                }
+            });
+        }
     }
 
     private Map<Integer, View> fixViewHashMap = new HashMap<>();
@@ -188,6 +189,7 @@ public class ExpandRecycleView extends FrameLayout {
             fixHeadContainerFrameLayout.addView(view, 0);
             fixViewHashMap.put(treeNode.getLevel(), view);
             adapter.createFixView(view, treeNode.getItemPosition(), treeNode);
+            view.setVisibility(INVISIBLE);
         }
         view.getLayoutParams().height = treeNode.getItemHeight();
         view.requestLayout();

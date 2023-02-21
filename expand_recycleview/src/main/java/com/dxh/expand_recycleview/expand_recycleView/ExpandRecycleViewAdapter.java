@@ -169,7 +169,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
     }
 
     //折叠节点
-    public void collapseGroup(int itemPosition) {
+    public void collapseGroup(int itemPosition, boolean isScrollToPositionStickyTop) {
         currentExpandPosition = -1;
         T t = mDatas.get(itemPosition);
         mDatas.clear();
@@ -206,11 +206,13 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             }
         }
         refreshExpandData();
-        scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        if (isScrollToPositionStickyTop) {
+            scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        }
     }
 
     //展开节点 其他节点自动关闭
-    public void expandOnlyOneGroup(int itemPosition) {
+    public void expandOnlyOneGroup(int itemPosition, boolean isScrollToPositionStickyTop) {
         currentExpandPosition = itemPosition;
         T t = mDatas.get(itemPosition);
         mDatas.clear();
@@ -242,11 +244,13 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             }
         }
         refreshExpandData();
-        scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        if (isScrollToPositionStickyTop) {
+            scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        }
     }
 
     //展开节点
-    public void expandGroup(int itemPosition) {
+    public void expandGroup(int itemPosition, boolean isScrollToPositionStickyTop) {
         currentExpandPosition = itemPosition;
         T t = mDatas.get(itemPosition);
         mDatas.clear();
@@ -278,7 +282,9 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             }
         }
         refreshExpandData();
-        scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        if (isScrollToPositionStickyTop) {
+            scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        }
     }
 
     //测量条目高度和到第一个条目的距离，并保存到treeNode

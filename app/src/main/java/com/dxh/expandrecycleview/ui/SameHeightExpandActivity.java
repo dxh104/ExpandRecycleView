@@ -80,7 +80,7 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Integer itemPostition = (Integer) v.getTag();
-                        collapseGroup(itemPostition);
+                        collapseGroup(itemPostition,true);
                     }
                 });
             }
@@ -121,9 +121,9 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "onItemExpandListner: position=" + position + " ids=" + idsStr + " isExpand=" + isExpand);
                 if (isExpand) {
-                    treeNodeExpandRecycleViewAdapter.collapseGroup(position);
+                    treeNodeExpandRecycleViewAdapter.collapseGroup(position,false);
                 } else {
-                    treeNodeExpandRecycleViewAdapter.expandGroup(position);
+                    treeNodeExpandRecycleViewAdapter.expandGroup(position,false);
 //                    treeNodeExpandRecycleViewAdapter.expandOnlyOneGroup(position);//TreeNodeLevelManager.getInstance().setFreeLevel(1)
                 }
             }
