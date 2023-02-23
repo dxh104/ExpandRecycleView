@@ -224,11 +224,11 @@ public class ExpandRecycleView extends FrameLayout {
         if (isUpdateHeight) {
             view.getLayoutParams().height = treeNode.getItemHeight();
             view.requestLayout();
-        }
-        FrameLayout frameLayout = (FrameLayout) view.getParent();
-        for (int i = 0; i < frameLayout.getChildCount(); i++) {
-            if (view != frameLayout.getChildAt(i)) {
-                frameLayout.getChildAt(i).setVisibility(INVISIBLE);
+            FrameLayout frameLayout = (FrameLayout) view.getParent();
+            for (int i = 0; i < frameLayout.getChildCount(); i++) {
+                if (view != frameLayout.getChildAt(i)) {
+                    frameLayout.getChildAt(i).setVisibility(INVISIBLE);
+                }
             }
         }
         return view;
