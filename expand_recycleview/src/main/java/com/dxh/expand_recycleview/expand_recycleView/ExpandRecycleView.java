@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -223,6 +224,12 @@ public class ExpandRecycleView extends FrameLayout {
         if (isUpdateHeight) {
             view.getLayoutParams().height = treeNode.getItemHeight();
             view.requestLayout();
+        }
+        FrameLayout frameLayout = (FrameLayout) view.getParent();
+        for (int i = 0; i < frameLayout.getChildCount(); i++) {
+            if (view != frameLayout.getChildAt(i)) {
+                frameLayout.getChildAt(i).setVisibility(INVISIBLE);
+            }
         }
         return view;
     }
