@@ -198,20 +198,25 @@ public class ExpandRecycleView extends FrameLayout {
         View view = fixHeightViewMap.get(treeNode.getItemHeight());
         if (view == null && treeNode.isExpand()) {//addView
             FrameLayout fixHeadContainerFrameLayout = getFixHeadContainerFrameLayout();
-            fixHeadContainerFrameLayout.removeAllViews();
-            int layoutId = adapter.getLayoutId(adapter.getItemViewType(treeNode.getItemPosition()));
-            view = LayoutInflater.from(getContext()).inflate(layoutId, null);
-            fixHeightViewMap.put(treeNode.getItemHeight(), view);
-            Iterator<Map.Entry<Integer, HashMap<Integer, View>>> iterator = fixViewHashMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, HashMap<Integer, View>> next = iterator.next();
-                HashMap<Integer, View> viewMap = next.getValue();
-                Iterator<Map.Entry<Integer, View>> viewMapIterator = viewMap.entrySet().iterator();
-                while (viewMapIterator.hasNext()) {
-                    Map.Entry<Integer, View> next1 = viewMapIterator.next();
-                    fixHeadContainerFrameLayout.addView(next1.getValue(), 0);
+            FrameLayout frameLayout = null;
+            for (int i = 0; i < fixHeadContainerFrameLayout.getChildCount(); i++) {
+                FrameLayout tempFrameLayout = (FrameLayout) fixHeadContainerFrameLayout.getChildAt(i);
+                int level = (int) tempFrameLayout.getTag();
+                if (level == treeNode.getLevel()) {
+                    frameLayout = tempFrameLayout;
+                    break;
                 }
             }
+            if (frameLayout == null) {
+                frameLayout = new FrameLayout(getContext());
+                frameLayout.setTag(treeNode.getLevel());
+                frameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+                fixHeadContainerFrameLayout.addView(frameLayout, 0);
+            }
+            int layoutId = adapter.getLayoutId(adapter.getItemViewType(treeNode.getItemPosition()));
+            view = LayoutInflater.from(getContext()).inflate(layoutId, null);
+            frameLayout.addView(view);
+            fixHeightViewMap.put(treeNode.getItemHeight(), view);
             adapter.createFixView(view, treeNode.getItemPosition(), treeNode);
             view.setVisibility(INVISIBLE);
         }
