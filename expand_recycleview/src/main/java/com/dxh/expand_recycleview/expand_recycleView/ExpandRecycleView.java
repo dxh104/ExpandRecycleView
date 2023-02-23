@@ -3,6 +3,7 @@ package com.dxh.expand_recycleview.expand_recycleView;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author XHD
@@ -76,7 +80,7 @@ public class ExpandRecycleView extends FrameLayout {
         }
     }
 
-    private Map<Integer, View> fixViewHashMap = new HashMap<>();
+    private Map<Integer, HashMap<Integer, View>> fixViewHashMap = new TreeMap<>();
 
     private void scrollChange() {
         ExpandRecycleViewAdapter adapter = (ExpandRecycleViewAdapter) mRecyclerView.getAdapter();
@@ -103,7 +107,7 @@ public class ExpandRecycleView extends FrameLayout {
                 nextParentOrBrotherTreeNodeMarginTop = nextParentOrBrotherTreeNode.getMarginTop();
                 nextParentOrBrotherTreeNodeItemHeight = nextParentOrBrotherTreeNode.getItemHeight();
             }
-            View view = getView(adapter, expandTreeNode);
+            View view = null;
             int y = 0;
             if (nextParentOrBrotherTreeNode != null) {
                 //吸顶
@@ -117,6 +121,7 @@ public class ExpandRecycleView extends FrameLayout {
 //                    } else {
 //                        level++;
 //                    }
+                    view = getView(adapter, expandTreeNode, true);
                     view.setTag(expandTreeNode.getItemPosition());
                     y = defalutFixTop;
                     view.setY(y);
@@ -133,6 +138,7 @@ public class ExpandRecycleView extends FrameLayout {
 //                    } else {
 //                        level++;
 //                    }
+                    view = getView(adapter, expandTreeNode, true);
                     view.setTag(expandTreeNode.getItemPosition());
                     y = nextParentOrBrotherTreeNodeMarginTop - scrollY - expandTreeNodeItemHeight;
                     view.setY(y);
@@ -140,6 +146,7 @@ public class ExpandRecycleView extends FrameLayout {
                     adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode);
 //                    Log.e(TAG, "scrollChange: 吸附" + expandTreeNode.getItemPosition());
                 } else {//消失
+                    view = getView(adapter, expandTreeNode, false);
                     if (view.getTag() != null) {
                         int itemPosition = (int) view.getTag();
                         if (itemPosition == expandTreeNode.getItemPosition()) {
@@ -159,6 +166,7 @@ public class ExpandRecycleView extends FrameLayout {
 //                    } else {
 //                        level++;
 //                    }
+                    view = getView(adapter, expandTreeNode, true);
                     view.setTag(expandTreeNode.getItemPosition());
                     y = defalutFixTop;
                     view.setY(y);
@@ -166,6 +174,7 @@ public class ExpandRecycleView extends FrameLayout {
                     adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode);
 //                    Log.e(TAG, "scrollChange: 吸顶-" + expandTreeNode.getItemPosition());
                 } else {//消失
+                    view = getView(adapter, expandTreeNode, false);
                     if (view.getTag() != null) {
                         int itemPosition = (int) view.getTag();
                         if (itemPosition == expandTreeNode.getItemPosition()) {
@@ -180,23 +189,40 @@ public class ExpandRecycleView extends FrameLayout {
 
     }
 
-    private View getView(ExpandRecycleViewAdapter adapter, TreeNode treeNode) {
-        View view = fixViewHashMap.get(treeNode.getLevel());
+    private View getView(ExpandRecycleViewAdapter adapter, TreeNode treeNode, boolean isUpdateHeight) {
+        HashMap<Integer, View> fixHeightViewMap = fixViewHashMap.get(treeNode.getLevel());
+        if (fixHeightViewMap == null) {
+            fixHeightViewMap = new HashMap<>();
+            fixViewHashMap.put(treeNode.getLevel(), fixHeightViewMap);
+        }
+        View view = fixHeightViewMap.get(treeNode.getItemHeight());
         if (view == null && treeNode.isExpand()) {//addView
             FrameLayout fixHeadContainerFrameLayout = getFixHeadContainerFrameLayout();
+            fixHeadContainerFrameLayout.removeAllViews();
             int layoutId = adapter.getLayoutId(adapter.getItemViewType(treeNode.getItemPosition()));
             view = LayoutInflater.from(getContext()).inflate(layoutId, null);
-            fixHeadContainerFrameLayout.addView(view, 0);
-            fixViewHashMap.put(treeNode.getLevel(), view);
+            fixHeightViewMap.put(treeNode.getItemHeight(), view);
+            Iterator<Map.Entry<Integer, HashMap<Integer, View>>> iterator = fixViewHashMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, HashMap<Integer, View>> next = iterator.next();
+                HashMap<Integer, View> viewMap = next.getValue();
+                Iterator<Map.Entry<Integer, View>> viewMapIterator = viewMap.entrySet().iterator();
+                while (viewMapIterator.hasNext()) {
+                    Map.Entry<Integer, View> next1 = viewMapIterator.next();
+                    fixHeadContainerFrameLayout.addView(next1.getValue(), 0);
+                }
+            }
             adapter.createFixView(view, treeNode.getItemPosition(), treeNode);
             view.setVisibility(INVISIBLE);
         }
-        view.getLayoutParams().height = treeNode.getItemHeight();
-        view.requestLayout();
+        if (isUpdateHeight) {
+            view.getLayoutParams().height = treeNode.getItemHeight();
+            view.requestLayout();
+        }
         return view;
     }
 
-    public Map<Integer, View> getFixViewHashMap() {
+    public Map<Integer, HashMap<Integer, View>> getFixViewHashMap() {
         return fixViewHashMap;
     }
 

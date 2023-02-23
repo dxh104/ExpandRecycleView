@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 group = 'com.github.dxh104'
-version = '1.0.1'
+version = '1.0.2'
 
 afterEvaluate {
     publishing {
@@ -13,7 +13,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.dxh.expand_recycleview'
                 artifactId = 'expand_recycleview'
-                version = '1.0.1'
+                version = '1.0.2'
             }
             // Creates a Maven publication called “debug”.
             debug(MavenPublication) {
@@ -21,7 +21,7 @@ afterEvaluate {
                 from components.debug
                 groupId = 'com.dxh.expand_recycleview'
                 artifactId = 'expand_recycleview_debug'
-                version = '1.0.1'
+                version = '1.0.2'
             }
         }
     }

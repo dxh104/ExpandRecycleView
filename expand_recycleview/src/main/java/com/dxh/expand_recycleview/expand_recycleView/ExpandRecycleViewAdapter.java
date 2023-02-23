@@ -1,6 +1,7 @@
 package com.dxh.expand_recycleview.expand_recycleView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,14 +195,19 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             }
         }
         if (mExpandRecycleView != null) {
-            Map<Integer, View> fixViewHashMap = mExpandRecycleView.getFixViewHashMap();
-            Iterator<Map.Entry<Integer, View>> iterator = fixViewHashMap.entrySet().iterator();
+            Map<Integer, HashMap<Integer, View>> fixViewHashMap = mExpandRecycleView.getFixViewHashMap();
+            Iterator<Map.Entry<Integer, HashMap<Integer, View>>> iterator = fixViewHashMap.entrySet().iterator();
             while (iterator.hasNext()) {
-                Map.Entry<Integer, View> next = iterator.next();
+                Map.Entry<Integer, HashMap<Integer, View>> next = iterator.next();
                 int fixLevel = next.getKey();
-                View fixView = next.getValue();
-                if (fixView != null && fixLevel >= level) {
-                    fixView.setVisibility(View.INVISIBLE);
+                HashMap<Integer, View> fixHeightViewMap = next.getValue();
+                if (fixLevel >= level) {
+                    Iterator<Map.Entry<Integer, View>> entryIterator = fixHeightViewMap.entrySet().iterator();
+                    while (entryIterator.hasNext()){
+                        Map.Entry<Integer, View> heightNext = entryIterator.next();
+                        View fixView = heightNext.getValue();
+                        fixView.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         }
