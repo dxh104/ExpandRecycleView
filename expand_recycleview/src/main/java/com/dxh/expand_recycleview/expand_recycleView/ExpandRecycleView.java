@@ -112,7 +112,7 @@ public class ExpandRecycleView extends FrameLayout {
             int y = 0;
             if (nextParentOrBrotherTreeNode != null) {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
+                if (expandTreeNodeMarginTop - scrollY < defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
 //                    if (expandTreeNode.getLevel() != level) {
 //                        if (expandTreeNode.getLevel() < level) {
@@ -158,7 +158,7 @@ public class ExpandRecycleView extends FrameLayout {
                 }
             } else {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
+                if (expandTreeNodeMarginTop - scrollY < defalutFixTop) {
 //                    if (expandTreeNode.getLevel() != level) {
 //                        if (expandTreeNode.getLevel() < level) {
 //                            break;
@@ -215,7 +215,7 @@ public class ExpandRecycleView extends FrameLayout {
             }
             if (nextParentOrBrotherTreeNode != null) {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
+                if (expandTreeNodeMarginTop - scrollY < defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
                     fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
                 } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
@@ -226,7 +226,7 @@ public class ExpandRecycleView extends FrameLayout {
                 }
             } else {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
+                if (expandTreeNodeMarginTop - scrollY < defalutFixTop) {
                     fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
                 }
             }
