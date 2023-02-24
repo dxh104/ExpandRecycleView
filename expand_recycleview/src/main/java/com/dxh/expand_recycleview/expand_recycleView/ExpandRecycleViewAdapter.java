@@ -194,6 +194,14 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
                 tempT = (T) parent;
             }
         }
+        hideAllFixView(level);
+        refreshExpandData();
+        if (isScrollToPositionStickyTop) {
+            scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        }
+    }
+
+    private void hideAllFixView(int level) {
         if (mExpandRecycleView != null) {
             Map<Integer, HashMap<Integer, View>> fixViewHashMap = mExpandRecycleView.getFixViewHashMap();
             Iterator<Map.Entry<Integer, HashMap<Integer, View>>> iterator = fixViewHashMap.entrySet().iterator();
@@ -203,17 +211,13 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
                 HashMap<Integer, View> fixHeightViewMap = next.getValue();
                 if (fixLevel >= level) {
                     Iterator<Map.Entry<Integer, View>> entryIterator = fixHeightViewMap.entrySet().iterator();
-                    while (entryIterator.hasNext()){
+                    while (entryIterator.hasNext()) {
                         Map.Entry<Integer, View> heightNext = entryIterator.next();
                         View fixView = heightNext.getValue();
                         fixView.setVisibility(View.INVISIBLE);
                     }
                 }
             }
-        }
-        refreshExpandData();
-        if (isScrollToPositionStickyTop) {
-            scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
         }
     }
 
@@ -227,6 +231,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         mDatas.addAll(rootExpandTreeNodeList);
         notifyDataSetChanged();
         int level = t.getLevel();
+        hideAllFixView(level);
         int defalutFixTop = 0;
         if (!isMeasureDataHeightMarginTop) {
             for (int i = 1; i < level; i++) {
@@ -265,6 +270,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         mDatas.addAll(rootExpandTreeNodeList);
         notifyDataSetChanged();
         int level = t.getLevel();
+        hideAllFixView(level);
         int defalutFixTop = 0;
         if (!isMeasureDataHeightMarginTop) {
             for (int i = 1; i < level; i++) {
@@ -382,5 +388,27 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
 
     public int getCurrentExpandPosition() {
         return currentExpandPosition;
+    }
+
+    //级别顺序 大->小
+    public List<Integer> getFixViewItemPositionData() {
+        List<Integer> fixViewItemPositionList = new ArrayList<>();
+        if (mExpandRecycleView != null) {
+            FrameLayout fixHeadContainerFrameLayout = mExpandRecycleView.getFixHeadContainerFrameLayout();
+            for (int i = 0; i < fixHeadContainerFrameLayout.getChildCount(); i++) {
+                FrameLayout frameLayout = (FrameLayout) fixHeadContainerFrameLayout.getChildAt(i);
+                for (int j = 0; j < frameLayout.getChildCount(); j++) {
+                    View child = frameLayout.getChildAt(j);
+                    if (child.getVisibility() == View.VISIBLE) {
+                        if (child.getTag() != null) {
+                            int itemPostion = (int) child.getTag();
+                            fixViewItemPositionList.add(itemPostion);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return fixViewItemPositionList;
     }
 }
