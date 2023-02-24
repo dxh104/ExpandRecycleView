@@ -178,6 +178,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         List rootExpandTreeNodeList = TreeNodeHelper.getRootExpandTreeNodeList(t);
         mDatas.addAll(rootExpandTreeNodeList);
         notifyDataSetChanged();
+        updateScrollChange();
         int level = t.getLevel();
         int defalutFixTop = 0;
         if (!isMeasureDataHeightMarginTop) {
@@ -230,6 +231,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         List rootExpandTreeNodeList = TreeNodeHelper.getRootExpandTreeNodeList(t);
         mDatas.addAll(rootExpandTreeNodeList);
         notifyDataSetChanged();
+        updateScrollChange();
         int level = t.getLevel();
         hideAllFixView(level);
         int defalutFixTop = 0;
@@ -269,6 +271,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         List rootExpandTreeNodeList = TreeNodeHelper.getRootExpandTreeNodeList(t);
         mDatas.addAll(rootExpandTreeNodeList);
         notifyDataSetChanged();
+        updateScrollChange();
         int level = t.getLevel();
         hideAllFixView(level);
         int defalutFixTop = 0;
@@ -296,6 +299,17 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         refreshExpandData();
         if (isScrollToPositionStickyTop) {
             scrollToPositionStickyTop(t.getItemPosition(), defalutFixTop);
+        }
+    }
+
+    public void updateScrollChange() {
+        if(mExpandRecycleView!=null){
+            mExpandRecycleView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mExpandRecycleView.scrollChange();
+                }
+            });
         }
     }
 
@@ -342,6 +356,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
         return measuredHeight;
     }
 
+    //bindview的时候获取可能会有问题
     public int getScrollY() {
         if (mExpandRecycleView != null) {
             int firstCompletelyVisibleItemPosition = mExpandRecycleView.getLinearLayoutManager().findFirstCompletelyVisibleItemPosition();

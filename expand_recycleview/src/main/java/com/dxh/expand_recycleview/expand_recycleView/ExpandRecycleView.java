@@ -59,15 +59,15 @@ public class ExpandRecycleView extends FrameLayout {
         fixHeadContainerFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setVisibility(INVISIBLE);
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-//                    scrollChange();
-//                }
-//            }
-//        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+                    scrollChange();
+                }
+            }
+        });
         if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
             mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
@@ -83,7 +83,7 @@ public class ExpandRecycleView extends FrameLayout {
 
     private Map<Integer, HashMap<Integer, View>> fixViewHashMap = new TreeMap<>();
 
-    private void scrollChange() {
+    public void scrollChange() {
         ExpandRecycleViewAdapter adapter = (ExpandRecycleViewAdapter) mRecyclerView.getAdapter();
         List<TreeNode> mDatas = adapter.mDatas;
         List<TreeNode> mExpandDatas = adapter.mExpandDatas;
