@@ -190,6 +190,51 @@ public class ExpandRecycleView extends FrameLayout {
 
     }
 
+    //计算获取吸顶条目的下标(级别顺序 大->小)
+    public List<Integer> getCalculateFixViewItemPositionData(boolean isIncludeAdsorb) {
+        List<Integer> fixViewItemPositionList = new ArrayList<>();
+        ExpandRecycleViewAdapter adapter = (ExpandRecycleViewAdapter) mRecyclerView.getAdapter();
+        List<TreeNode> mExpandDatas = adapter.mExpandDatas;
+        int scrollY = adapter.getScrollY();
+        int defalutFixTop = 0;
+        for (int i = 0; i < mExpandDatas.size(); i++) {
+            defalutFixTop = 0;
+            TreeNode expandTreeNode = mExpandDatas.get(i);
+            TreeNode nextParentOrBrotherTreeNode = expandTreeNode.getNextParentOrBrotherTreeNode();
+            TreeNode tempExpandTreeNode = expandTreeNode;
+            while (tempExpandTreeNode.getParent() != null) {
+                TreeNode parent = tempExpandTreeNode.getParent();
+                defalutFixTop += parent.getItemHeight();
+                tempExpandTreeNode = parent;
+            }
+            int expandTreeNodeMarginTop = expandTreeNode.getMarginTop();
+            int expandTreeNodeItemHeight = expandTreeNode.getItemHeight();
+            int nextParentOrBrotherTreeNodeMarginTop = 0;
+            if (nextParentOrBrotherTreeNode != null) {
+                nextParentOrBrotherTreeNodeMarginTop = nextParentOrBrotherTreeNode.getMarginTop();
+            }
+            if (nextParentOrBrotherTreeNode != null) {
+                //吸顶
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
+                        nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
+                    fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
+                } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
+                        nextParentOrBrotherTreeNodeMarginTop - scrollY > defalutFixTop) {//吸附
+                    if (isIncludeAdsorb) {
+                        fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
+                    }
+                }
+            } else {
+                //吸顶
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
+                    fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
+                }
+            }
+
+        }
+        return fixViewItemPositionList;
+    }
+
     private View getView(ExpandRecycleViewAdapter adapter, TreeNode treeNode, boolean isUpdateHeight) {
         HashMap<Integer, View> fixHeightViewMap = fixViewHashMap.get(treeNode.getLevel());
         if (fixHeightViewMap == null) {
