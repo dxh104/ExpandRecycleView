@@ -34,6 +34,7 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
         setContentView(R.layout.activity_not_same_height_expand);
         initView();
         TreeNodeLevelManager.getInstance().clearFreeLevel();
+        TreeNodeLevelManager.getInstance().setFreeLevel(1);
         List<TreeNode<Title>> treeNodeList = DataHelper.testgetRootExpandTreeNodeList();
         ExpandRecycleViewAdapter<TreeNode<Title>> treeNodeExpandRecycleViewAdapter = new ExpandRecycleViewAdapter<TreeNode<Title>>(treeNodeList) {
             private TextView tvTitle;
@@ -59,12 +60,19 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
 
             @Override
             protected void bindData(BaseViewHolder holder, int position, TreeNode<Title> titleTreeNode) {
-                tvTitle.setText(titleTreeNode.getData().titleContent);
+                if (position % 2 == 0) {
+                    tvTitle.setText(titleTreeNode.getData().titleContent + titleTreeNode.getData().titleContent + titleTreeNode.getData().titleContent);
+                    tvTitle.getLayoutParams().height = 200;
+                } else {
+                    tvTitle.setText(titleTreeNode.getData().titleContent);
+                    tvTitle.getLayoutParams().height = 40;
+                }
+                tvTitle.requestLayout();
                 tvTitle.setTextColor(titleTreeNode.getData().textColor);
                 tvTitle.setBackgroundColor(titleTreeNode.getData().background);
-                int tvTitleHeight = 120 - 20 * titleTreeNode.getLevel();
-                tvTitle.getLayoutParams().height = tvTitleHeight;
-                tvTitle.requestLayout();
+//                int tvTitleHeight = 120 - 20 * titleTreeNode.getLevel();
+//                tvTitle.getLayoutParams().height = tvTitleHeight;
+//                tvTitle.requestLayout();
                 if (titleTreeNode.isLeaf()) {
                     if (titleTreeNode.isChecked()) {
                         tvTitle.setTextColor(Color.parseColor("#ffff00"));
@@ -77,31 +85,39 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
             @Override
             protected void createFixView(View view, int position, TreeNode<Title> titleTreeNode) {
                 super.createFixView(view, position, titleTreeNode);
-                if(view==null){
+                if (view == null) {
                     return;
                 }
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Integer itemPostition = (Integer) v.getTag();
-                        collapseGroup(itemPostition,true);
+                        collapseGroup(itemPostition, true);
                     }
                 });
             }
 
             @Override
-            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode) {
-                super.changeFixViewData(view, position, titleTreeNode);
+            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode,boolean isGetItemHeight) {
+                super.changeFixViewData(view, position, titleTreeNode,isGetItemHeight);
                 if (view == null) {
                     return;
                 }
                 tvTitle = (TextView) view.findViewById(R.id.tv_title);
-                tvTitle.setText(titleTreeNode.getData().titleContent);
+                if (position % 2 == 0) {
+                    tvTitle.setText(titleTreeNode.getData().titleContent + titleTreeNode.getData().titleContent + titleTreeNode.getData().titleContent);
+                    tvTitle.getLayoutParams().height = 200;
+                } else {
+                    tvTitle.setText(titleTreeNode.getData().titleContent);
+                    tvTitle.getLayoutParams().height = 40;
+                }
+                tvTitle.requestLayout();
                 tvTitle.setTextColor(titleTreeNode.getData().textColor);
                 tvTitle.setBackgroundColor(titleTreeNode.getData().background);
-                int tvTitleHeight = 120 - 20 * titleTreeNode.getLevel();
-                tvTitle.getLayoutParams().height = tvTitleHeight;
-                tvTitle.requestLayout();
+                ((View)tvTitle.getParent()).requestLayout();
+//                int tvTitleHeight = 120 - 20 * titleTreeNode.getLevel();
+//                tvTitle.getLayoutParams().height = tvTitleHeight;
+//                tvTitle.requestLayout();
             }
         };
         treeNodeExpandRecycleViewAdapter.setmExpandRecycleView(expandRecycleView);
@@ -120,6 +136,7 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                 Log.e(TAG, "onItemCheckListner: position=" + position + " ids=" + idsStr + " isChecked=" + isChecked);
                 treeNode.setOneCheckedAndNotCheckedOther(!isChecked);//取消其他选中，设置当前选中状态
                 treeNodeExpandRecycleViewAdapter.notifyDataSetChanged();
+                treeNodeExpandRecycleViewAdapter.updateScrollChange();
             }
 
             @Override
@@ -130,9 +147,9 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "onItemExpandListner: position=" + position + " ids=" + idsStr + " isExpand=" + isExpand);
                 if (isExpand) {
-                    treeNodeExpandRecycleViewAdapter.collapseGroup(position,true);
+                    treeNodeExpandRecycleViewAdapter.collapseGroup(position, true);
                 } else {
-                    treeNodeExpandRecycleViewAdapter.expandGroup(position,true);
+                    treeNodeExpandRecycleViewAdapter.expandOnlyOneGroup(position, true);
                 }
             }
         });

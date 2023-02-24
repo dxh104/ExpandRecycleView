@@ -127,7 +127,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = defalutFixTop;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
 //                    Log.e(TAG, "scrollChange: 吸顶" + expandTreeNode.getItemPosition());
                 } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY > defalutFixTop) {//吸附
@@ -144,7 +144,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = nextParentOrBrotherTreeNodeMarginTop - scrollY - expandTreeNodeItemHeight;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
 //                    Log.e(TAG, "scrollChange: 吸附" + expandTreeNode.getItemPosition());
                 } else {//消失
                     view = getView(adapter, expandTreeNode, false);
@@ -172,7 +172,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = defalutFixTop;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
 //                    Log.e(TAG, "scrollChange: 吸顶-" + expandTreeNode.getItemPosition());
                 } else {//消失
                     view = getView(adapter, expandTreeNode, false);

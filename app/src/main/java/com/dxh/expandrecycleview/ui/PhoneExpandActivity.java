@@ -69,8 +69,8 @@ public class PhoneExpandActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode) {
-                super.changeFixViewData(view, position, titleTreeNode);
+            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode,boolean isGetItemHeight) {
+                super.changeFixViewData(view, position, titleTreeNode,isGetItemHeight);
                 if (view == null) {
                     return;
                 }

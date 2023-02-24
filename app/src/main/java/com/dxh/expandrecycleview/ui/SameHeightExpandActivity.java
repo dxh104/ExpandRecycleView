@@ -17,6 +17,7 @@ import com.dxh.expand_recycleview.expand_recycleView.TreeNodeLevelManager;
 import com.dxh.expandrecycleview.R;
 import com.dxh.expandrecycleview.helper.DataHelper;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,21 +74,21 @@ public class SameHeightExpandActivity extends AppCompatActivity {
             @Override
             protected void createFixView(View view, int position, TreeNode<Title> titleTreeNode) {
                 super.createFixView(view, position, titleTreeNode);
-                if(view==null){
+                if (view == null) {
                     return;
                 }
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Integer itemPostition = (Integer) v.getTag();
-                        collapseGroup(itemPostition,true);
+                        collapseGroup(itemPostition, true);
                     }
                 });
             }
 
             @Override
-            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode) {
-                super.changeFixViewData(view, position, titleTreeNode);
+            protected void changeFixViewData(View view, int position, TreeNode<Title> titleTreeNode,boolean isGetItemHeight) {
+                super.changeFixViewData(view, position, titleTreeNode,isGetItemHeight);
                 if (view == null) {
                     return;
                 }
@@ -95,6 +96,12 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                 tvTitle.setText(titleTreeNode.getData().titleContent);
                 tvTitle.setTextColor(titleTreeNode.getData().textColor);
                 tvTitle.setBackgroundColor(titleTreeNode.getData().background);
+                List<Integer> fixViewItemPositionData = getFixViewItemPositionData();
+                List<Integer> fixViewItemPositionData2 = expandRecycleView.getCalculateFixViewItemPositionData(true);
+                String string = Arrays.toString(fixViewItemPositionData.toArray());
+                String string2 = Arrays.toString(fixViewItemPositionData2.toArray());
+                boolean isShow = view.getVisibility() == View.VISIBLE ? true : false;
+                Log.e(TAG, "changeFixViewData: string=" + string + " string2=" + string2+" isShow="+isShow+" tag="+view.getTag());
             }
         };
         treeNodeExpandRecycleViewAdapter.setmExpandRecycleView(expandRecycleView);
@@ -121,9 +128,9 @@ public class SameHeightExpandActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "onItemExpandListner: position=" + position + " ids=" + idsStr + " isExpand=" + isExpand);
                 if (isExpand) {
-                    treeNodeExpandRecycleViewAdapter.collapseGroup(position,false);
+                    treeNodeExpandRecycleViewAdapter.collapseGroup(position, false);
                 } else {
-                    treeNodeExpandRecycleViewAdapter.expandGroup(position,false);
+                    treeNodeExpandRecycleViewAdapter.expandGroup(position, false);
 //                    treeNodeExpandRecycleViewAdapter.expandOnlyOneGroup(position);//TreeNodeLevelManager.getInstance().setFreeLevel(1)
                 }
             }

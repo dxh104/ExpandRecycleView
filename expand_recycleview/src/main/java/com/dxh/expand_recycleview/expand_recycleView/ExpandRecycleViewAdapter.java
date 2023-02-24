@@ -144,7 +144,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
      * @param position
      * @param t
      */
-    protected void changeFixViewData(View view, int position, T t) {
+    protected void changeFixViewData(View view, int position, T t,boolean isGetItemHeight) {
 
     }
 
@@ -349,7 +349,7 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
             view.setVisibility(View.INVISIBLE);
             measureViewMap.put(layoutId, view);
         }
-        changeFixViewData(view, position, t);
+        changeFixViewData(view, position, t,true);
         view.requestLayout();
         view.measure(View.MeasureSpec.makeMeasureSpec(mExpandRecycleView.getmRecyclerView().getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         int measuredHeight = view.getMeasuredHeight();
