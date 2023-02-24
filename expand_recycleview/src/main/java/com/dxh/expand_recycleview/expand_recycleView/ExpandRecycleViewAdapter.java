@@ -345,6 +345,9 @@ public abstract class ExpandRecycleViewAdapter<T extends TreeNode> extends Recyc
     public int getScrollY() {
         if (mExpandRecycleView != null) {
             int firstCompletelyVisibleItemPosition = mExpandRecycleView.getLinearLayoutManager().findFirstCompletelyVisibleItemPosition();
+            if (firstCompletelyVisibleItemPosition < 0) {
+                return 0;
+            }
             View view = mExpandRecycleView.getLinearLayoutManager().findViewByPosition(firstCompletelyVisibleItemPosition);
             int top = view.getTop();
             int marginTop = mDatas.get(firstCompletelyVisibleItemPosition).getMarginTop();
