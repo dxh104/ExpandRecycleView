@@ -68,17 +68,17 @@ public class ExpandRecycleView extends FrameLayout {
                 }
             }
         });
-        if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
-            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-                @Override
-                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                    super.onDraw(c, parent, state);
-                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-                        scrollChange();
-                    }
-                }
-            });
-        }
+//        if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
+//            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//                @Override
+//                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+//                    super.onDraw(c, parent, state);
+//                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+//                        scrollChange();
+//                    }
+//                }
+//            });
+//        }
     }
 
     private Map<Integer, HashMap<Integer, View>> fixViewHashMap = new TreeMap<>();
