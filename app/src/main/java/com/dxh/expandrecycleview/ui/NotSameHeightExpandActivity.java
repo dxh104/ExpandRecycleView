@@ -136,7 +136,6 @@ public class NotSameHeightExpandActivity extends AppCompatActivity {
                 Log.e(TAG, "onItemCheckListner: position=" + position + " ids=" + idsStr + " isChecked=" + isChecked);
                 treeNode.setOneCheckedAndNotCheckedOther(!isChecked);//取消其他选中，设置当前选中状态
                 treeNodeExpandRecycleViewAdapter.notifyDataSetChanged();
-                treeNodeExpandRecycleViewAdapter.updateScrollChange();
             }
 
             @Override

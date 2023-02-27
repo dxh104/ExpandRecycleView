@@ -3,11 +3,9 @@ package com.dxh.expand_recycleview.expand_recycleView;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -59,26 +56,26 @@ public class ExpandRecycleView extends FrameLayout {
         fixHeadContainerFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         onMeasureFrameLayout.setVisibility(INVISIBLE);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-                    scrollChange();
-                }
-            }
-        });
-//        if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
-//            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//                @Override
-//                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-//                    super.onDraw(c, parent, state);
-//                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-//                        scrollChange();
-//                    }
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+//                    scrollChange();
 //                }
-//            });
-//        }
+//            }
+//        });
+        if (mRecyclerView.getItemDecorationCount() == 0) {//防止没有启动自动置顶，只刷新适配器
+            mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                    super.onDraw(c, parent, state);
+                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
+                        scrollChange();
+                    }
+                }
+            });
+        }
     }
 
     private Map<Integer, HashMap<Integer, View>> fixViewHashMap = new TreeMap<>();
@@ -190,7 +187,11 @@ public class ExpandRecycleView extends FrameLayout {
 
     }
 
-    //计算获取吸顶条目的下标(级别顺序 大->小)
+    /**
+     * 计算获取吸顶条目的下标(级别顺序 大->小)
+     * @param isIncludeAdsorb 是否包括吸附
+     * @return
+     */
     public List<Integer> getCalculateFixViewItemPositionData(boolean isIncludeAdsorb) {
         List<Integer> fixViewItemPositionList = new ArrayList<>();
         ExpandRecycleViewAdapter adapter = (ExpandRecycleViewAdapter) mRecyclerView.getAdapter();
