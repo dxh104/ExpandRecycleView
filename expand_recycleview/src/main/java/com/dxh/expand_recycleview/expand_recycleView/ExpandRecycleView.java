@@ -109,7 +109,7 @@ public class ExpandRecycleView extends FrameLayout {
             int y = 0;
             if (nextParentOrBrotherTreeNode != null) {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY < defalutFixTop &&
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
 //                    if (expandTreeNode.getLevel() != level) {
 //                        if (expandTreeNode.getLevel() < level) {
@@ -124,7 +124,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = defalutFixTop;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode, false);
 //                    Log.e(TAG, "scrollChange: 吸顶" + expandTreeNode.getItemPosition());
                 } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY > defalutFixTop) {//吸附
@@ -141,7 +141,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = nextParentOrBrotherTreeNodeMarginTop - scrollY - expandTreeNodeItemHeight;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode, false);
 //                    Log.e(TAG, "scrollChange: 吸附" + expandTreeNode.getItemPosition());
                 } else {//消失
                     view = getView(adapter, expandTreeNode, false);
@@ -155,7 +155,7 @@ public class ExpandRecycleView extends FrameLayout {
                 }
             } else {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY < defalutFixTop) {
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
 //                    if (expandTreeNode.getLevel() != level) {
 //                        if (expandTreeNode.getLevel() < level) {
 //                            break;
@@ -169,7 +169,7 @@ public class ExpandRecycleView extends FrameLayout {
                     y = defalutFixTop;
                     view.setY(y);
                     view.setVisibility(VISIBLE);
-                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode,false);
+                    adapter.changeFixViewData(view, expandTreeNode.getItemPosition(), expandTreeNode, false);
 //                    Log.e(TAG, "scrollChange: 吸顶-" + expandTreeNode.getItemPosition());
                 } else {//消失
                     view = getView(adapter, expandTreeNode, false);
@@ -189,6 +189,7 @@ public class ExpandRecycleView extends FrameLayout {
 
     /**
      * 计算获取吸顶条目的下标(级别顺序 大->小)
+     *
      * @param isIncludeAdsorb 是否包括吸附
      * @return
      */
@@ -216,7 +217,7 @@ public class ExpandRecycleView extends FrameLayout {
             }
             if (nextParentOrBrotherTreeNode != null) {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY < defalutFixTop &&
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop &&
                         nextParentOrBrotherTreeNodeMarginTop - scrollY >= expandTreeNodeItemHeight + defalutFixTop) {
                     fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
                 } else if (nextParentOrBrotherTreeNodeMarginTop - scrollY < expandTreeNodeItemHeight + defalutFixTop &&
@@ -227,7 +228,7 @@ public class ExpandRecycleView extends FrameLayout {
                 }
             } else {
                 //吸顶
-                if (expandTreeNodeMarginTop - scrollY < defalutFixTop) {
+                if (expandTreeNodeMarginTop - scrollY <= defalutFixTop) {
                     fixViewItemPositionList.add(0, expandTreeNode.getItemPosition());
                 }
             }
