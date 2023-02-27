@@ -70,8 +70,13 @@ public class ExpandRecycleView extends FrameLayout {
                 @Override
                 public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.onDraw(c, parent, state);
-                    if (((ExpandRecycleViewAdapter) mRecyclerView.getAdapter()).isOpenStickyTop()) {
-                        scrollChange();
+                    RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+                    if (adapter != null) {
+                        if (adapter instanceof ExpandRecycleViewAdapter) {
+                            if (((ExpandRecycleViewAdapter) adapter).isOpenStickyTop()) {
+                                scrollChange();
+                            }
+                        }
                     }
                 }
             });

@@ -18,7 +18,7 @@ allprojects {
 添加依赖
 
 ```
-	implementation 'com.github.dxh104.ExpandRecycleView:expand_recycleview:2.0.4'
+	implementation 'com.github.dxh104.ExpandRecycleView:expand_recycleview:2.0.5'
 ```
 
 example {
